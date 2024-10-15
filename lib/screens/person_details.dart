@@ -1,4 +1,5 @@
 import 'package:famous/models/Person_Details.dart';
+import 'package:famous/screens/full_image.dart';
 import 'package:famous/services/persons_api.dart';
 import 'package:flutter/material.dart';
 
@@ -42,11 +43,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
-                      child: Image.network(
-                        'https://image.tmdb.org/t/p/w500${person.profilePath}',
-                        width: 400,
-                        height: 400,
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FullImageScreen(
+                                imageUrl:
+                                    'https://image.tmdb.org/t/p/w500${person.profilePath}'),
+                          ),
+                        );
+                      },
+                      child: Center(
+                        child: Image.network(
+                          'https://image.tmdb.org/t/p/w500${person.profilePath}',
+                          width: 400,
+                          height: 400,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 10),
