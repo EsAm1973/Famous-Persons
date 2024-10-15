@@ -12,9 +12,10 @@ class FamousPersonsScreen extends StatefulWidget {
 
 class _FamousPersonsScreenState extends State<FamousPersonsScreen> {
   late Future<List<Person>> persons;
+  List<Person> favoriteList = [];
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     persons = ApiService.fetchPersons();
   }
@@ -42,13 +43,16 @@ class _FamousPersonsScreenState extends State<FamousPersonsScreen> {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 final person = snapshot.data![index];
+                final isFavorite = favoriteList.contains(person);
+
                 return InkWell(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            DetailsScreen(id: person.id,),
+                        builder: (context) => DetailsScreen(
+                          id: person.id,
+                        ),
                       ),
                     );
                   },
@@ -59,9 +63,24 @@ class _FamousPersonsScreenState extends State<FamousPersonsScreen> {
                       child: ListTile(
                         title: Text(
                           person.name,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(person.category),
+                        trailing: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              if (isFavorite) {
+                                favoriteList.remove(person);
+                              } else {
+                                favoriteList.add(person);
+                              }
+                            });
+                          },
+                          icon: Icon(
+                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                            color: isFavorite ? Colors.red : null,
+                          ),
+                        ),
                       ),
                     ),
                   ),
